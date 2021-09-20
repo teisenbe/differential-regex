@@ -33,7 +33,6 @@ fn nullable(r: &Regex) -> Regex {
 }
 
 fn differentiate_char(c: char, r: &Regex) -> Regex {
-    println!("Differentiating {:?} with respect to {}", r, c);
     match r {
         Regex::Empty => Regex::Null,
         Regex::Char(b) => {
@@ -79,7 +78,6 @@ fn differentiate(s: &str, r: &Regex) -> Regex {
 }
 
 pub fn match_regex(r: &Regex, s: &str) -> bool {
-    println!("Matching {:?} with string {}", r, s);
     nullable_bool(&differentiate(s, r))
 }
 
