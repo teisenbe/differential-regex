@@ -91,7 +91,7 @@ impl Regex {
         result
     }
 
-    pub fn match_regex(&self, s: &str) -> bool {
+    pub fn match_string(&self, s: &str) -> bool {
         self.differentiate(s).nullable_bool()
     }
 }
@@ -110,51 +110,51 @@ mod tests {
     fn match_null() {
         let regex = Regex::Null;
         assert!("∅" == regex.to_string());
-        assert!(!regex.match_regex(""));
-        assert!(!regex.match_regex("a"));
+        assert!(!regex.match_string(""));
+        assert!(!regex.match_string("a"));
     }
 
     #[test]
     fn match_empty() {
         let regex = Regex::Empty;
         assert!("\"\"" == regex.to_string());
-        assert!(regex.match_regex(""));
-        assert!(!regex.match_regex("a"));
+        assert!(regex.match_string(""));
+        assert!(!regex.match_string("a"));
     }
 
     #[test]
     fn match_char() {
         let regex = Regex::Char('b');
         assert!("Char(b)" == regex.to_string());
-        assert!(!regex.match_regex(""));
-        assert!(!regex.match_regex("a"));
-        assert!(regex.match_regex("b"));
-        assert!(!regex.match_regex("bb"));
+        assert!(!regex.match_string(""));
+        assert!(!regex.match_string("a"));
+        assert!(regex.match_string("b"));
+        assert!(!regex.match_string("bb"));
     }
 
     #[test]
     fn match_star() {
         let regex = Regex::Star(Box::new(Regex::Char('a')));
         assert!("Star(Char(a))" == regex.to_string());
-        assert!(regex.match_regex(""));
-        assert!(regex.match_regex("a"));
-        assert!(regex.match_regex("aa"));
-        assert!(regex.match_regex("aaa"));
-        assert!(!regex.match_regex("aaab"));
-        assert!(!regex.match_regex("aaba"));
-        assert!(!regex.match_regex("baaa"));
-        assert!(!regex.match_regex("b"));
+        assert!(regex.match_string(""));
+        assert!(regex.match_string("a"));
+        assert!(regex.match_string("aa"));
+        assert!(regex.match_string("aaa"));
+        assert!(!regex.match_string("aaab"));
+        assert!(!regex.match_string("aaba"));
+        assert!(!regex.match_string("baaa"));
+        assert!(!regex.match_string("b"));
     }
 
     #[test]
     fn match_concat() {
         let regex = Regex::Concat(Box::new(Regex::Char('a')), Box::new(Regex::Char('b')));
         assert!("Concat(Char(a), Char(b))" == regex.to_string());
-        assert!(!regex.match_regex(""));
-        assert!(!regex.match_regex("a"));
-        assert!(!regex.match_regex("aa"));
-        assert!(regex.match_regex("ab"));
-        assert!(!regex.match_regex("abc"));
+        assert!(!regex.match_string(""));
+        assert!(!regex.match_string("a"));
+        assert!(!regex.match_string("aa"));
+        assert!(regex.match_string("ab"));
+        assert!(!regex.match_string("abc"));
     }
 
     #[test]
@@ -162,10 +162,10 @@ mod tests {
         let regex = Regex::Or(Box::new(Regex::Char('a')), Box::new(Regex::Char('b')));
         assert!("Or(Char(a), Char(b))" == regex.to_string());
         println!("{:?}", regex);
-        assert!(!regex.match_regex(""));
-        assert!(regex.match_regex("a"));
-        assert!(regex.match_regex("b"));
-        assert!(!regex.match_regex("ab"));
+        assert!(!regex.match_string(""));
+        assert!(regex.match_string("a"));
+        assert!(regex.match_string("b"));
+        assert!(!regex.match_string("ab"));
     }
 
     #[test]
@@ -175,18 +175,18 @@ mod tests {
             Box::new(Regex::Star(Box::new(Regex::Char('a')))),
         );
         assert!("And(Char(a), Star(Char(a)))" == regex.to_string());
-        assert!(!regex.match_regex(""));
-        assert!(regex.match_regex("a"));
-        assert!(!regex.match_regex("aa"));
+        assert!(!regex.match_string(""));
+        assert!(regex.match_string("a"));
+        assert!(!regex.match_string("aa"));
     }
 
     #[test]
     fn match_not() {
         let regex = Regex::Not(Box::new(Regex::Char('a')));
         assert!("Not(Char(a))" == regex.to_string());
-        assert!(regex.match_regex(""));
-        assert!(!regex.match_regex("a"));
-        assert!(regex.match_regex("b"));
-        assert!(regex.match_regex("aa"));
+        assert!(regex.match_string(""));
+        assert!(!regex.match_string("a"));
+        assert!(regex.match_string("b"));
+        assert!(regex.match_string("aa"));
     }
 }
